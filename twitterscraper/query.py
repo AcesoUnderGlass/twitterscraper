@@ -113,6 +113,9 @@ def query_tweets_once(query, limit=None, lang=''):
     except BaseException:
         logging.exception("An unknown error occurred! Returning tweets "
                           "gathered so far.")
+    except json.decoder.JSONDecodeError as e:
+        logging.exception('Failed to parse JSON "{}" while requesting "{}".'.format(
+            e, url))
     logging.info("Got {} tweets for {}.".format(
         len(tweets), query))
     return tweets
@@ -166,4 +169,7 @@ def query_tweets(query, limit=None, begindate=dt.date(2017,1,1), enddate=dt.date
     except KeyboardInterrupt:
         logging.info("Program interrupted by user. Returning all tweets "
                      "gathered so far.")
+    except json.decoder.JSONDecodeError as e:
+        logging.exception('Failed to parse JSON "{}" while requesting "{}".'.format(
+            e, url))
     return all_tweets
